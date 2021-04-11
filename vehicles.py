@@ -10,11 +10,11 @@ class Car(CryptoSide):
     
     def execute_command(self):
         if self.command == 0:
-            print('[car opened]')
+            print('\n4: (action) car: opened')
         elif self.command == 1:
-            print('[car closed]')
+            print('\n4: (action) car: closed')
         else: 
-            print('[unknown command]')
+            print('\n4: (action) car: do nothing (unknown command id)')
 
 class Trinket(CryptoSide):
     def __init__(self, p_name):

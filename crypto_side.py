@@ -19,16 +19,17 @@ class ChallengeMsg:
     def read(self, x):
         return self.content
 
+    def get_text(self):
+        return self.content
+
 class CryptoSide:
     name = ''
-    # how to generate new?
-    #e= int(random.uniform(65557, 65557*2))
-    #__secret_key = RSA.generate(1024, os.urandom) # os.urandom
-    #public_key = __secret_key.publickey()
     (__secret_key, public_key) = rsa.newkeys(1024)
     b_key = ''
     command = ''
     inner_challenge = ''
+    outer_challenge = ''
+    signature = ''
 
     def __init__(self, p_name):
         self.name = p_name
@@ -36,9 +37,9 @@ class CryptoSide:
     def get_pubkey(self):
         return self.public_key
 
+
+
     def reset_keys(self):
-        # self.__secret_key = RSA.generate(1024, os.urandom)
-        # self.public_key = self.__secret_key.publickey()
         (self.public_key, self.__secret_key) = rsa.newkeys(512)
         Logger.log('{} keys reset'.format(self.name))
 
@@ -56,9 +57,10 @@ class CryptoSide:
         return self.command
 
     def generate_challenge(self):
-        #SHA256.new((command+challenge).encode())
         chg = secrets.token_hex(nbytes=256)
-        self.inner_challenge = ChallengeMsg(SHA256.new(chg.encode()))
+        self.inner_challenge = ChallengeMsg(SHA256
+            .new(chg.encode())
+            .hexdigest())
         Logger.log('{} challenge generated'.format(self.name))
         return self.inner_challenge
 
@@ -73,19 +75,19 @@ class CryptoSide:
         b_sign = p_side_b.sign()
         Logger.log('{} checking sign...'.format(self.name))
         try:
-            #pkcs1_15.new(self.b_key).verify(self.inner_challenge, b_sign)
             rsa.verify(self.inner_challenge, b_sign, self.b_key)
         except: 
             raise VerifyError('unverified signature')
-        # pkcs1_15.new(self.b_key).verify(self.inner_challenge, b_sign+b'x01') - check invalid
 
 
 
     def sign(self):
-        #signature = pkcs1_15.new(self.__secret_key).sign(self.outer_challenge)
-        signature = rsa.sign(self.outer_challenge, self.__secret_key, 'SHA-1')
+        try:
+            self.signature = rsa.sign(self.outer_challenge, self.__secret_key, 'SHA-1')
+        except: 
+            raise VerifyError('double use of command')
         Logger.log('{} signed'.format(self.name))
-        return signature
+        return self.signature
 
 
 

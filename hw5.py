@@ -13,7 +13,7 @@ from crypto_side import *
 
 if __name__ == '__main__':
 
-	Logger.config(1)
+	Logger.config(0)
 
 	car_alice = Car('Camry 3.5')
 	trinket_bob = Trinket('Bob')
@@ -49,5 +49,15 @@ if __name__ == '__main__':
 		handshake(trinket_bob, car_alice)
 		challenge(trinket_eva, car_alice)
 		response(trinket_bob, car_alice)
-	except VerifyError:
-		print('[try of unauthorized access]')
+	except VerifyError as e:
+		print('\n{}'.format(repr(e)))
+
+	try:
+		print('\n=== TEST: Bob, Alice, open x2 ===\n')
+		trinket_bob.set_command(0)
+		handshake(trinket_bob, car_alice)
+		challenge(trinket_bob, car_alice)
+		response(trinket_bob, car_alice)
+		response(trinket_bob, car_alice)
+	except VerifyError as e:
+		print('\n{}'.format(repr(e)))
