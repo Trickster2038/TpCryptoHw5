@@ -22,3 +22,5 @@ if __name__ == '__main__':
 	register(trinket_bob, car_alice)
 	trinket_bob.set_command(1)
 	handshake(trinket_bob, car_alice)
+	challenge(trinket_bob, car_alice)
+	response(trinket_bob, car_alice)
