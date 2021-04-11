@@ -9,13 +9,14 @@
 # a ={'av':4,'bn':5} 
 # a['av'] == 4
 
-from car import *
-from trinket import *
+from vehicles import Car
+from vehicles import Trinket
 from protocol import *
+from logger import log
 
 
 if __name__ == '__main__':
-	car_alice = Car()
+	car_alice = Car('Camry 3.5')
 	trinket_bob = Trinket()
 	car_alice.reset_keys()
 	trinket_bob.reset_keys()

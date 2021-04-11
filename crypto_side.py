@@ -1,16 +1,20 @@
 from Crypto.PublicKey import RSA
 from Crypto.Signature import pkcs1_15
 from Crypto.Hash import SHA256
-from logger import *
+from logger import log
 import os
 import secrets
 
-class Trinket:
+class CryptoSide:
+    name = ''
     __secret_key = RSA.generate(1024, os.urandom)
     public_key = __secret_key.publickey()
-    car_key = ''
+    b_key = ''
     command = ''
     inner_challenge = ''
+
+    def __init__(self, p_name):
+        self.name = p_name
 
     def get_pubkey(self):
         return self.public_key
@@ -18,16 +22,16 @@ class Trinket:
     def reset_keys(self):
         self.__secret_key = RSA.generate(1024, os.urandom)
         self.public_key = self.__secret_key.publickey()
-        log('trinket keys reset')
+        log('{} keys reset'.format(self.name))
 
-    def set_car_key(self, p_trinket):
-        self.car_key = p_trinket.get_pubkey()
+    def set_side_pubkey(self, p_side_b):
+        self.b_key = p_side_b.get_pubkey()
 
 
 
 
     def set_command(self, p_cmd):
-        log('trinket command set: {}'.format(p_cmd))
+        log('{} command set: {}'.format(self.name, p_cmd))
         self.command = p_cmd
 
     def get_command(self):
@@ -37,26 +41,26 @@ class Trinket:
         #SHA256.new((command+challenge).encode())
         chg = secrets.token_hex(nbytes=256)
         self.inner_challenge = SHA256.new(chg.encode())
-        log('trinket challenge generated')
+        log('{} challenge generated'.format(self.name))
         return self.inner_challenge
 
 
 
-    def set_outer_challenge(self, p_car):
-        self.outer_challenge = p_car.generate_challenge()
-        log('trinket got challenge')
+    def set_outer_challenge(self, p_side_b):
+        self.outer_challenge = p_side_b.generate_challenge()
+        log('{} got challenge'.format(self.name))
 
-    def check_confirmation(self, p_car):
-        car_sign = p_car.sign()
-        log('trinket checking sign...')
-        pkcs1_15.new(self.car_key).verify(self.inner_challenge, car_sign)
-        # pkcs1_15.new(self.car_key).verify(self.inner_challenge, car_sign+b'x01') - check invalid
+    def check_confirmation(self, p_side_b):
+        b_sign = p_side_b.sign()
+        log('{} checking sign...'.format(self.name))
+        pkcs1_15.new(self.b_key).verify(self.inner_challenge, b_sign)
+        # pkcs1_15.new(self.b_key).verify(self.inner_challenge, b_sign+b'x01') - check invalid
 
 
 
     def sign(self):
         signature = pkcs1_15.new(self.__secret_key).sign(self.outer_challenge)
-        log('trnket signed')
+        log('{} signed'.format(self.name))
         return signature
 
 
@@ -64,4 +68,4 @@ class Trinket:
     def expire_challenges(self):
         self.inner_challenge = ''
         self.outer_challenge = ''
-        log('trinket challenges expired')
+        log('{} challenges expired'.format(self.name))
