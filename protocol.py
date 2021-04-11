@@ -4,8 +4,7 @@ def register(p_trinket, p_car):
 	p_car.set_side_pubkey(p_trinket)
 	p_trinket.set_side_pubkey(p_car)
 	print('0: (registration) {} (pubkey1 written to trinked), {} (pubkey2 written to car)'
-		.format(p_car.get_pubkey().export_key().decode()[27:40], 
-			p_trinket.get_pubkey().export_key().decode()[27:40]))
+		.format('key1','key2'))
 	# 0: (registration) 0xXXXXXXXXXXXX (pubkey1 written to trinked), 0xXXXXXXXXXXXXXX (pubkey2 written to car)
 
 def handshake(p_trinket, p_car):
