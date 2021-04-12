@@ -1,3 +1,8 @@
+'''
+Class implements functions
+of simply-configurable console logger
+'''
+
 class Logger:
 	state = 1
 
@@ -9,7 +14,3 @@ class Logger:
 	@staticmethod
 	def config(p_state):
 		Logger.state = p_state
-
-	@staticmethod
-	def short(txt):
-		return txt[1:16]
