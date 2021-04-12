@@ -42,28 +42,28 @@
 1. Установить python >= 3.8.5
 
 2. Перед запуском приложения установить библиотеки rsa, pycryptodome
-```cmd
+```
 $ pip install rsa
 $ pip install pycryptodome
 ```
 3. Запустить основную программу
 - Windows
-```cmd
+```
 > python hw5.py
 ```
 - Linux *(не протестировано)*
-```sh
+```
 $ ./hw5.py
 ```
 ## Включение логирования
 Для включения продвинутого логирования необходимо модифицировать параметры Logger'a в файле hw5.py
 *(пример лога см. в конце документа)*
-```py
+```
 11|    Logger.config(1)
 ```
 ## Тестирование
 - Валидное открытие машины (закрытие машины и обработка неизвестной команды - аналогичны)
-```cmd
+```
 ===== TEST: Bob, Alice, open =====
 
 1: (handshake) trinket-Bob -> Camry 3.5, 0 (id command), 6b3c5331997478e3b600 (challenge for car)
@@ -72,14 +72,14 @@ $ ./hw5.py
 4: (action) car: opened
 ```
 - Попытка вмешательства активного злоумышленника Евы
-```cmd
+```
 ===== TEST: Bob, Eva, open =====
 
 1: (handshake) trinket-Bob -> Camry 3.5, 0 (id command), 607799e4c40f85bda0fb (challenge for car)
 VerifyError('unverified signature')
 ```
 - Попытка переиспользования команды
-```cmd
+```
 ===== TEST: Bob, Alice, open x2 =====
 
 1: (handshake) trinket-Bob -> Camry 3.5, 0 (id command), 9d8dde3ac5c2e11b9eb5 (challenge for car)
@@ -90,7 +90,7 @@ VerifyError('double use of command')
 ```
 - Валидное открытие машины в режиме продвинутого логирования
 *(лог промежуточных действий предшествует итоговому сообщению о завершении этапа протокола)*
-```cmd
+```
 ===== TEST: Bob, Alice, open =====
 
 > log: trinket-Bob command set: 0
